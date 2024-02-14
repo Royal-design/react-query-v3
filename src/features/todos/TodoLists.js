@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTodos, addTodo } from "../../api/todosApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -14,11 +14,14 @@ const TodoLists = () => {
     isError,
     error,
     data: todos
-  } = useQuery("todos", getTodos, {
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: getTodos,
     select: (data) => data.sort((a, b) => b.id - a.id)
   });
 
-  const addTodoMutation = useMutation(addTodo, {
+  const addTodoMutation = useMutation({
+    mutationFn: addTodo,
     onSuccess: () => {
       // Invalidates cache and refetch
       queryClient.invalidateQueries("todos");

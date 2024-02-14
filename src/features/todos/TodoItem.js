@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTodo, deleteTodo } from "../../api/todosApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -7,14 +7,16 @@ import React from "react";
 const TodoItem = ({ todo }) => {
   const queryClient = useQueryClient();
 
-  const updateTodoMutation = useMutation(updateTodo, {
+  const updateTodoMutation = useMutation({
+    mutationFn: updateTodo,
     onSuccess: () => {
       // Invalidates cache and refetch
       queryClient.invalidateQueries("todos");
     }
   });
 
-  const deleteTodoMutation = useMutation(deleteTodo, {
+  const deleteTodoMutation = useMutation({
+    mutationFn: deleteTodo,
     onSuccess: () => {
       // Invalidates cache and refetch
       queryClient.invalidateQueries("todos");
